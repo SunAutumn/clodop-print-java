@@ -1,8 +1,8 @@
-package com.max.clodop;
+package com.clodop;
 
-import com.max.clodop.entity.PrintResult;
-import com.max.clodop.entity.Printers;
-import com.max.clodop.entity.Printer;
+import com.clodop.entity.PrintResult;
+import com.clodop.entity.Printer;
+import com.clodop.entity.Printers;
 
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-package com.max.clodop.entity;
+package com.clodop.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import java.io.Serializable;

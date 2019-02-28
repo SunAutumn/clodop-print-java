@@ -3,25 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <groupId>com.max</groupId>
+    <groupId>com.clodop</groupId>
     <artifactId>clodop-print-java</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
 
     <packaging>jar</packaging>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <dependencies>
         <dependency>
@@ -39,7 +27,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.6</version>
+            <version>3.8.1</version>
         </dependency>
     </dependencies>
 
@@ -53,4 +41,55 @@
             <url>http://192.168.51.210:16001/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.0.14</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>proguard</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <attach>true</attach>
+                    <attachArtifactClassifier>pg</attachArtifactClassifier>
+                    <!-- attach 的作用是在 install 与 deploy 时将生成的 pg 文件也安装与部署 -->
+                    <options> <!-- 详细配置方式参考 ProGuard 官方文档 -->
+                        <!--<option>-dontobfuscate</option>-->
+                        <option>-ignorewarnings</option> <!--忽略所有告警-->
+                        <option>-dontshrink</option>   <!--不做 shrink -->
+                        <option>-dontoptimize</option> <!--不做 optimize -->
+                        <option>-dontskipnonpubliclibraryclasses</option>
+                        <option>-dontskipnonpubliclibraryclassmembers</option>
+
+                        <option>-keep class **.package-info</option>
+                        <!--保持包注解类-->
+
+                        <option>-keepattributes Signature</option>
+                        <!--JAXB NEED，具体原因不明，不加会导致 JAXB 出异常，如果不使用 JAXB 根据需要修改-->
+                        <!-- Jaxb requires generics to be available to perform xml parsing and without this option ProGuard was not retaining that information after obfuscation. That was causing the exception above. -->
+
+                    </options>
+                    <outjar>${project.build.finalName}</outjar>
+                    <libs>
+                        <lib>${java.home}/lib/rt.jar</lib>
+                    </libs>
+
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

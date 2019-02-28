@@ -1,4 +1,4 @@
-package com.max.clodop.entity;
+package com.clodop.entity;
 
 import java.util.HashMap;
 import java.util.Map;
